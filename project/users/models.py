@@ -7,7 +7,7 @@ from .managers import CustomUserManager
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField('email address', unique=True)
-    is_cashier = models.BooleanField(verbose_name='is cashier')
+    is_cashier = models.BooleanField(verbose_name='is cashier', default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['is_cashier']
