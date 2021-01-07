@@ -43,17 +43,8 @@ class Hall(models.Model):
 
 
 class Showing(models.Model):
-    class Weekday(models.IntegerChoices):
-        MONDAY = 1
-        TUESDAY = 2
-        WEDNESDAY = 3
-        THURSDAY = 4
-        FRIDAY = 5
-        SATURDAY = 6
-        SUNDAY = 7
-
     id = models.AutoField(primary_key=True)
-    week_day_numerical = models.IntegerField(choices=Weekday.choices)
+    date = models.DateField(verbose_name='showing date', null=False, blank=False)
     start_hour = models.IntegerField()
     start_minutes = models.IntegerField()
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
@@ -71,15 +62,22 @@ class Showing(models.Model):
             ),
         ]
 
-    def __str__(self):
-        start_hour = str(self.start_hour).zfill(2)
-        start_minutes = str(self.start_minutes).zfill(2)
-        weekday = self.Weekday(self.week_day_numerical).label
-
-        return f'{self.movie.title} on {weekday} ({start_hour}:{start_minutes})'
-
     def get_formatted_time(self):
         start_hour = str(self.start_hour).zfill(2)
         start_minutes = str(self.start_minutes).zfill(2)
 
         return f'{start_hour}:{start_minutes}'
+
+    def get_numerical_weekday(self):
+        """Return week day where Monday is 0 and Sunday is 6"""
+        return self.date.weekday()
+
+    def get_weekday(self):
+        return self.date.strftime('%A')
+
+    def __str__(self):
+        start_hour = str(self.start_hour).zfill(2)
+        start_minutes = str(self.start_minutes).zfill(2)
+        weekday = self.get_weekday()
+
+        return f'{self.movie.title} on {weekday} ({self.date} {start_hour}:{start_minutes})'

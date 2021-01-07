@@ -1,4 +1,5 @@
 from django.views.generic import ListView
+from django.utils import timezone
 
 from .models import Showing
 
@@ -10,11 +11,28 @@ class ScheduleView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['weekdays'] = Showing.Weekday.choices
+
+        today = timezone.now().date().weekday()
+        weekdays = (
+            (0, 'Monday'),
+            (1, 'Tuesday'),
+            (2, 'Wednesday'),
+            (3, 'Thursday'),
+            (4, 'Friday'),
+            (5, 'Saturday'),
+            (6, 'Sunday'),
+        )
+        weekdays = weekdays[today:7] + weekdays[0:today]
+        context['weekdays'] = weekdays
 
         return context
 
     def get_queryset(self):
-        showings = Showing.objects.all().order_by('week_day_numerical', 'start_hour', 'start_minutes')
+        today = timezone.now().date()
+        last_day = today + timezone.timedelta(days=6)
+
+        showings = Showing.objects.filter(
+            date__gte=today, date__lte=last_day).order_by(
+            'date', 'start_hour', 'start_minutes')
 
         return showings

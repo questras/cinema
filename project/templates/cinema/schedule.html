@@ -5,7 +5,7 @@
         <p>
         <h2>{{ weekday }}</h2>
         {% for showing in showings %}
-            {% if showing.week_day_numerical == num %}
+            {% if showing.get_numerical_weekday == num %}
                 <p>
                     {{ showing.get_formatted_time }} {{ showing.movie.title }} (Hall {{ showing.hall.number }})
                 </p>
