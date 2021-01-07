@@ -10,7 +10,7 @@ class CustomUser(AbstractUser):
     is_cashier = models.BooleanField(verbose_name='is cashier', default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['is_cashier']
+    REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
