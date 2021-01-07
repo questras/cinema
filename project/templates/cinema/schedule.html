@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for num, weekday in weekdays %}
+        <p>
+        <h2>{{ weekday }}</h2>
+        {% for showing in showings %}
+            {% if showing.week_day_numerical == num %}
+                <p>
+                    {{ showing.get_formatted_time }} {{ showing.movie.title }} (Hall {{ showing.hall.number }})
+                </p>
+            {% endif %}
+        {% endfor %}
+        </p>
+
+    {% endfor %}
+
+{% endblock %}

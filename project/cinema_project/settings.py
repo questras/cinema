@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # local
-    'users.apps.UsersConfig'
+    'users.apps.UsersConfig',
+    'cinema.apps.CinemaConfig',
 ]
 
 MIDDLEWARE = [
