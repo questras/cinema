@@ -1,8 +1,11 @@
 from django.db import models
+from django.utils.text import slugify
+from django.urls import reverse
 
 
 class Movie(models.Model):
     id = models.AutoField(primary_key=True)
+    slug = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=256)
     director = models.CharField(max_length=256)
     year_of_production = models.IntegerField(verbose_name='year of production')
@@ -21,6 +24,13 @@ class Movie(models.Model):
                 name='correct_duration_in_minutes'
             ),
         ]
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Movie, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('movie-detail-view', args=(self.slug,))
 
     def __str__(self):
         return f'{self.title}({self.year_of_production}) by {self.director}'

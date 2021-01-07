@@ -1,7 +1,7 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.utils import timezone
 
-from .models import Showing
+from .models import Showing, Movie
 
 
 class ScheduleView(ListView):
@@ -36,3 +36,9 @@ class ScheduleView(ListView):
             'date', 'start_hour', 'start_minutes')
 
         return showings
+
+
+class MovieDetailView(DetailView):
+    model = Movie
+    context_object_name = 'movie'
+    template_name = 'cinema/movie_detail.html'
