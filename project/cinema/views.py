@@ -42,3 +42,9 @@ class MovieDetailView(DetailView):
     model = Movie
     context_object_name = 'movie'
     template_name = 'cinema/movie_detail.html'
+
+
+class ShowingDetailView(DetailView):
+    model = Showing
+    context_object_name = 'showing'
+    template_name = 'cinema/showing_detail.html'

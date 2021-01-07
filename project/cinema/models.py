@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
@@ -53,7 +55,7 @@ class Hall(models.Model):
 
 
 class Showing(models.Model):
-    id = models.AutoField(primary_key=True)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     date = models.DateField(verbose_name='showing date', null=False, blank=False)
     start_hour = models.IntegerField()
     start_minutes = models.IntegerField()
@@ -84,6 +86,9 @@ class Showing(models.Model):
 
     def get_weekday(self):
         return self.date.strftime('%A')
+
+    def get_absolute_url(self):
+        return reverse('showing-detail-view', args=(self.uuid,))
 
     def __str__(self):
         start_hour = str(self.start_hour).zfill(2)

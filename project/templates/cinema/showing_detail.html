@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Showing</h2>
+    <p><a href="{{ showing.movie.get_absolute_url }}">{{ showing.movie.title }}</a></p>
+    <p>{{ showing.date }} ({{ showing.get_weekday }} {{ showing.get_formatted_time }})</p>
+{% endblock %}
