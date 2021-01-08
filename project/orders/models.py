@@ -25,7 +25,10 @@ class Order(models.Model):
             )
         ]
 
+    def is_accepted(self):
+        return 'accepted' if self.accepted else 'not accepted'
+
     def __str__(self):
-        accepted = 'accepted' if self.accepted else 'not accepted'
+        accepted = self.is_accepted()
         client = self.client.get_full_name()
         return f'Ticket #{self.uuid}: {self.showing} bought by {client} ({accepted})'

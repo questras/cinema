@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Your current tickets:</h1>
+    {% for order in tickets_current %}
+        <p>
+            {{ order.tickets_amount }} tickets for
+            <a href="{{ order.showing.get_absolute_url }}">{{ order.showing }}</a>
+            ({{ order.is_accepted }})
+        </p>
+    {% endfor %}
+    <h1>History of your tickets:</h1>
+    {% for order in tickets_history %}
+        <p>{{ order.showing }}</p>
+    {% endfor %}
+{% endblock %}
