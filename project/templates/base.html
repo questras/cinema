@@ -8,6 +8,13 @@
     <title>Cinema</title>
 </head>
 <body>
+{% if user.is_authenticated %}
+    <h2>Welcome {{ user.get_full_name }}</h2>
+    <p><a href="{% url 'logout' %}">logout</a></p>
+{% else %}
+    <h2>You are not logged in</h2>
+    <p><a href="{% url 'login' %}">login</a></p>
+{% endif %}
 
 {% block content %}
 

@@ -90,6 +90,15 @@ class Showing(models.Model):
     def get_absolute_url(self):
         return reverse('showing-detail-view', args=(self.uuid,))
 
+    def all_places(self):
+        return self.hall.places
+
+    def taken_places(self):
+        return self.order_set.all().aggregate(taken=models.Sum('tickets_amount'))['taken']
+
+    def free_places(self):
+        return self.all_places() - self.taken_places()
+
     def __str__(self):
         start_hour = str(self.start_hour).zfill(2)
         start_minutes = str(self.start_minutes).zfill(2)

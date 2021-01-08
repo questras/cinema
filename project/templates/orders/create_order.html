@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>{{ showing }}</h3>
+    {{ showing.free_places }} / {{ showing.all_places }} Free Seats
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Order</button>
+    </form>
+
+{% endblock %}

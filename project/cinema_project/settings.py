@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # local
     'users.apps.UsersConfig',
     'cinema.apps.CinemaConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
