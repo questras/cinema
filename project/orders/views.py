@@ -12,7 +12,7 @@ class CreateOrderView(LoginRequiredMixin, CreateView):
     model = Order
     form_class = CreateOrderForm
     template_name = 'orders/create_order.html'
-    success_url = reverse_lazy('schedule')  # todo: change to profile
+    success_url = reverse_lazy('profile')
 
     def get_showing(self):
         showing_uuid = self.kwargs['showing_uuid'] or None

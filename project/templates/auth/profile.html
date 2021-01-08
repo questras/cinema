@@ -13,4 +13,11 @@
     {% for order in tickets_history %}
         <p>{{ order.showing }}</p>
     {% endfor %}
+
+    {% if tickets_for_cashier %}
+    <h1>Tickets to accept:</h1>
+        {% for order in tickets_for_cashier %}
+            <p>{{ order }}<button>Accept</button><button>Reject</button></p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

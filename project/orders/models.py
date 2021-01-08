@@ -26,7 +26,14 @@ class Order(models.Model):
         ]
 
     def is_accepted(self):
-        return 'accepted' if self.accepted else 'not accepted'
+        string = ''
+        if self.accepted:
+            string = 'accepted'
+        elif not self.accepted and self.cashier_who_accepted is not None:
+            string = 'rejected'
+        else:
+            string = 'not accepted'
+        return string
 
     def __str__(self):
         accepted = self.is_accepted()

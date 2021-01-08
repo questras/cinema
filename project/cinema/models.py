@@ -94,7 +94,8 @@ class Showing(models.Model):
         return self.hall.places
 
     def taken_places(self):
-        return self.order_set.all().aggregate(taken=models.Sum('tickets_amount'))['taken'] or 0
+        taken_places = self.order_set.exclude(accepted=False, cashier_who_accepted__isnull=False)
+        return taken_places.aggregate(taken=models.Sum('tickets_amount'))['taken'] or 0
 
     def free_places(self):
         return self.all_places() - self.taken_places()

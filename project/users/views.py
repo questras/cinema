@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 
 from .forms import CustomUserCreationForm
+from orders.models import Order
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
@@ -15,9 +16,14 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         today = timezone.now().date()
         tickets_history = self.request.user.my_orders.filter(date__lt=today)
         tickets_current = self.request.user.my_orders.filter(date__gte=today)
+        tickets_for_cashier = None
+
+        if self.request.user.is_cashier:
+            tickets_for_cashier = Order.objects.filter(cashier_who_accepted__isnull=True)
 
         context['tickets_history'] = tickets_history
         context['tickets_current'] = tickets_current
+        context['tickets_for_cashier'] = tickets_for_cashier
 
         return context
 
