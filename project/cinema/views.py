@@ -42,6 +42,16 @@ class MovieDetailView(DetailView):
     context_object_name = 'movie'
     template_name = 'cinema/movie_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        movie = self.get_object()
+        now = timezone.now()
+        showings = movie.showing_set.filter(when__gte=now).order_by('when')
+        context['showings'] = showings
+
+        return context
+
 
 class ShowingDetailView(DetailView):
     model = Showing

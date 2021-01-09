@@ -9,7 +9,7 @@
         <br>
         <p>{{ movie.description }}</p>
         <h3>Showings:</h3>
-        {% for showing in movie.showing_set.all %}
+        {% for showing in showings %}
             <p>
                 <a href="{{ showing.get_absolute_url }}">{{ showing }}</a>
             </p>
