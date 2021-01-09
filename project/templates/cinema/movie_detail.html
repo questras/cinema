@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>{{ movie.title }}</h2>
-    <p>Director: {{ movie.director }}</p>
-    <p>Release Year: {{ movie.year_of_production }}</p>
-    <p>Duration: {{ movie.duration_in_minutes }} minutes</p>
-    <br>
-    <p>{{ movie.description }}</p>
-    <h3>Showings:</h3>
-    {% for showing in movie.showing_set.all %}
-        <p>
-            <a href="{{ showing.get_absolute_url }}">{{ showing }}</a>
-        </p>
-    {% endfor %}
+    <p>
+        <h2>{{ movie.title }}</h2>
+        <p>Director: {{ movie.director }}</p>
+        <p>Release Year: {{ movie.year_of_production }}</p>
+        <p>Duration: {{ movie.duration_in_minutes }} minutes</p>
+        <br>
+        <p>{{ movie.description }}</p>
+        <h3>Showings:</h3>
+        {% for showing in movie.showing_set.all %}
+            <p>
+                <a href="{{ showing.get_absolute_url }}">{{ showing }}</a>
+            </p>
+        {% endfor %}
+    </p>
 {% endblock %}

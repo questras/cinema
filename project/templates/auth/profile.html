@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Your current tickets:</h1>
+    <p>
+    <h2>Your current tickets:</h2>
     {% for order in tickets_current %}
         <p>
             {{ order.tickets_amount }} tickets for
@@ -9,19 +10,25 @@
             ({{ order.is_accepted }})
         </p>
     {% endfor %}
-    <h1>History of your tickets:</h1>
+    <h2>History of your tickets:</h2>
     {% for order in tickets_history %}
         <p>{{ order.showing }}</p>
     {% endfor %}
 
     {% if tickets_for_cashier %}
-    <h1>Tickets to accept:</h1>
+        <h2>Tickets to accept:</h2>
         {% for order in tickets_for_cashier %}
             <p>
                 {{ order }}
-                <a href="{% url 'accept-order' order.uuid %}"><button>Accept</button></a>
-                <a href="{% url 'reject-order' order.uuid %}"><button>Reject</button></a>
+                <a href="{% url 'accept-order' order.uuid %}">
+                    <button class="btn btn-success">Accept</button>
+                </a>
+                <a href="{% url 'reject-order' order.uuid %}">
+                    <button class="btn btn-danger">Reject</button>
+                </a>
             </p>
         {% endfor %}
     {% endif %}
+    </p>
+
 {% endblock %}

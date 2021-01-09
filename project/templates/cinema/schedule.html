@@ -10,7 +10,7 @@
                     {{ showing.get_time }}
                     <a href="{{ showing.get_absolute_url }}">{{ showing.movie.title }}</a>
                     (Hall {{ showing.hall.number }})
-                    <a href="{% url 'create-order' showing.uuid %}">Book a Ticket!</a>
+                    <a href="{% url 'create-order' showing.uuid %}"><button class="btn btn-primary">Book</button></a>
                 </p>
             {% endif %}
         {% endfor %}
