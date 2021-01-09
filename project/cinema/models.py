@@ -56,9 +56,7 @@ class Hall(models.Model):
 
 class Showing(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.DateField(verbose_name='showing date', null=False, blank=False)
-    start_hour = models.IntegerField()
-    start_minutes = models.IntegerField()
+    when = models.DateTimeField(null=False, blank=False)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     hall = models.ForeignKey(Hall, on_delete=models.CASCADE)
 
@@ -74,18 +72,21 @@ class Showing(models.Model):
             ),
         ]
 
-    def get_formatted_time(self):
-        start_hour = str(self.start_hour).zfill(2)
-        start_minutes = str(self.start_minutes).zfill(2)
+    def get_time(self):
+        start_hour = self.when.time().hour
+        start_minutes = self.when.time().minute
 
-        return f'{start_hour}:{start_minutes}'
+        return f'{start_hour:2d}:{start_minutes:2d}'
+
+    def get_date(self):
+        return self.when.date()
 
     def get_numerical_weekday(self):
         """Return week day where Monday is 0 and Sunday is 6"""
-        return self.date.weekday()
+        return self.when.weekday()
 
     def get_weekday(self):
-        return self.date.strftime('%A')
+        return self.when.strftime('%A')
 
     def get_absolute_url(self):
         return reverse('showing-detail-view', args=(self.uuid,))
@@ -101,8 +102,8 @@ class Showing(models.Model):
         return self.all_places() - self.taken_places()
 
     def __str__(self):
-        start_hour = str(self.start_hour).zfill(2)
-        start_minutes = str(self.start_minutes).zfill(2)
+        start_time = self.get_time()
+        start_date = self.get_date()
         weekday = self.get_weekday()
 
-        return f'{self.movie.title} on {weekday} ({self.date} {start_hour}:{start_minutes})'
+        return f'{self.movie.title} on {weekday} ({start_date} {start_time})'

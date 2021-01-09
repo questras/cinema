@@ -7,7 +7,7 @@
         {% for showing in showings %}
             {% if showing.get_numerical_weekday == num %}
                 <p>
-                    {{ showing.get_formatted_time }}
+                    {{ showing.get_time }}
                     <a href="{{ showing.get_absolute_url }}">{{ showing.movie.title }}</a>
                     (Hall {{ showing.hall.number }})
                     <a href="{% url 'create-order' showing.uuid %}">Book a Ticket!</a>

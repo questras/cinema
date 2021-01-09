@@ -32,9 +32,8 @@ class ScheduleView(ListView):
         last_day = today + timezone.timedelta(days=6)
 
         showings = Showing.objects.filter(
-            date__gte=today, date__lte=last_day).order_by(
-            'date', 'start_hour', 'start_minutes')
-
+            when__date__gte=today,
+            when__date__lte=last_day).order_by('when')
         return showings
 
 
