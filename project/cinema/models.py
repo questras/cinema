@@ -76,7 +76,7 @@ class Showing(models.Model):
         start_hour = self.when.time().hour
         start_minutes = self.when.time().minute
 
-        return f'{start_hour:2d}:{start_minutes:2d}'
+        return f'{start_hour:02}:{start_minutes:02}'
 
     def get_date(self):
         return self.when.date()
