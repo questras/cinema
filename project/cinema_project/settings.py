@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'cinema.apps.CinemaConfig',
     'orders.apps.OrdersConfig',
+
+    # 3rd party
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +138,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+# Crispy Forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
