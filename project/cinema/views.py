@@ -28,12 +28,12 @@ class ScheduleView(ListView):
         return context
 
     def get_queryset(self):
-        today = timezone.now().date()
-        last_day = today + timezone.timedelta(days=6)
+        today = timezone.now()
+        last_day = (today + timezone.timedelta(days=6)).replace(hour=23, minute=59)
 
         showings = Showing.objects.filter(
-            when__date__gte=today,
-            when__date__lte=last_day).order_by('when')
+            when__gte=today,
+            when__lte=last_day).order_by('when')
         return showings
 
 
