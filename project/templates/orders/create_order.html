@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <p>
     <h3>{{ showing }}</h3>
     {{ showing.free_places }} / {{ showing.all_places }} Free Seats
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Order</button>
+        <button type="submit" class="btn btn-success">Order</button>
     </form>
-
+    </p>
 {% endblock %}
