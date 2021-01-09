@@ -17,7 +17,11 @@
     {% if tickets_for_cashier %}
     <h1>Tickets to accept:</h1>
         {% for order in tickets_for_cashier %}
-            <p>{{ order }}<button>Accept</button><button>Reject</button></p>
+            <p>
+                {{ order }}
+                <a href="{% url 'accept-order' order.uuid %}"><button>Accept</button></a>
+                <a href="{% url 'reject-order' order.uuid %}"><button>Reject</button></a>
+            </p>
         {% endfor %}
     {% endif %}
 {% endblock %}

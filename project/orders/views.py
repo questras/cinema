@@ -1,11 +1,37 @@
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.core.exceptions import PermissionDenied
 
 from .models import Order
 from .forms import CreateOrderForm
 from cinema.models import Showing
+
+
+def finalize_order(request, order_uuid, accepted):
+    if not request.user.is_cashier:
+        raise PermissionDenied
+
+    order = get_object_or_404(Order, pk=order_uuid)
+
+    if not order.cashier_who_accepted:
+        order.cashier_who_accepted = request.user
+        order.accepted = accepted
+        order.save()
+
+    return redirect('profile')
+
+
+@login_required()
+def accept_order_view(request, order_uuid):
+    return finalize_order(request, order_uuid, True)
+
+
+@login_required()
+def reject_order_view(request, order_uuid):
+    return finalize_order(request, order_uuid, False)
 
 
 class CreateOrderView(LoginRequiredMixin, CreateView):

@@ -14,12 +14,15 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         today = timezone.now().date()
-        tickets_history = self.request.user.my_orders.filter(date__lt=today)
-        tickets_current = self.request.user.my_orders.filter(date__gte=today)
+        tickets_history = self.request.user.my_orders.filter(showing__date__lt=today)
+        tickets_current = self.request.user.my_orders.filter(showing__date__gte=today)
         tickets_for_cashier = None
 
         if self.request.user.is_cashier:
-            tickets_for_cashier = Order.objects.filter(cashier_who_accepted__isnull=True)
+            today = timezone.now()
+            print(today)
+            tickets_for_cashier = Order.objects.filter(cashier_who_accepted__isnull=True,
+                                                       showing__date__gte=today)
 
         context['tickets_history'] = tickets_history
         context['tickets_current'] = tickets_current

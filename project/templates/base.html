@@ -8,6 +8,7 @@
     <title>Cinema</title>
 </head>
 <body>
+<a href="{% url 'schedule' %}">Schedule</a>
 {% if user.is_authenticated %}
     <h2>Welcome <a href="{% url 'profile' %}">{{ user.get_full_name }}</a></h2>
     <p><a href="{% url 'logout' %}">logout</a></p>
