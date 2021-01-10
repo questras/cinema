@@ -9,6 +9,8 @@ verify_ssl = true
 django = "*"
 psycopg2-binary = "==2.8.6"
 django-crispy-forms = "*"
+gunicorn = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.8"
