@@ -1,8 +1,16 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.urls import reverse
+from django.core.exceptions import ValidationError
+
+from .validators import (
+    validate_correct_year_of_production,
+    validate_correct_duration,
+    validate_correct_no_places
+)
 
 
 class Movie(models.Model):
@@ -10,9 +18,14 @@ class Movie(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     title = models.CharField(max_length=256)
     director = models.CharField(max_length=256)
-    year_of_production = models.IntegerField(verbose_name='year of production')
+    year_of_production = models.IntegerField(
+        verbose_name='year of production',
+        validators=[validate_correct_year_of_production]
+    )
     type = models.CharField(max_length=80)
-    duration_in_minutes = models.IntegerField(verbose_name='duration in minutes')
+    duration_in_minutes = models.IntegerField(
+        verbose_name='duration in minutes',
+        validators=[validate_correct_duration])
     description = models.TextField()
 
     class Meta:
@@ -22,7 +35,7 @@ class Movie(models.Model):
                 name='correct_year_of_production'
             ),
             models.CheckConstraint(
-                check=models.Q(duration_in_minutes__gte=0),
+                check=models.Q(duration_in_minutes__gte=0) & models.Q(duration_in_minutes__lte=600),
                 name='correct_duration_in_minutes'
             ),
         ]
@@ -40,12 +53,15 @@ class Movie(models.Model):
 
 class Hall(models.Model):
     number = models.AutoField(primary_key=True)
-    places = models.IntegerField(verbose_name='amount of places')
+    places = models.IntegerField(
+        verbose_name='amount of places',
+        validators=[validate_correct_no_places]
+    )
 
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=models.Q(places__gte=0),
+                check=models.Q(places__gte=0) & models.Q(places__lte=400),
                 name='correct_amount_of_places'
             ),
         ]
@@ -61,20 +77,45 @@ class Showing(models.Model):
     hall = models.ForeignKey(Hall, on_delete=models.CASCADE)
 
     class Meta:
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(start_hour__gte=0) & models.Q(start_hour__lte=23),
-                name='correct_start_hour'
-            ),
-            models.CheckConstraint(
-                check=models.Q(start_minutes__gte=0) & models.Q(start_minutes__lte=59),
-                name='correct_start_minutes'
-            ),
-        ]
+        ordering = ['when']
+
+    def clean(self):
+        """Check if there are not any collisions with
+        showing that is to be added.
+        """
+
+        day_before = self.when - timezone.timedelta(days=1)
+        day_after = self.when + timezone.timedelta(days=1)
+
+        showings_that_might_collide = Showing.objects.filter(
+            when__gte=day_before, when__lte=day_after, hall=self.hall
+        )
+
+        new_start_time = self.when
+        new_end_time = self.when + timezone.timedelta(minutes=self.movie.duration_in_minutes)
+
+        for showing in showings_that_might_collide:
+            existing_start_time = showing.when
+            existing_end_time = showing.when + timezone.timedelta(minutes=showing.movie.duration_in_minutes)
+
+            if existing_start_time < new_start_time < existing_end_time or \
+                    existing_start_time < new_end_time < existing_end_time or \
+                    (new_start_time < existing_start_time and new_end_time > existing_end_time):
+                colliding_showing = str(showing)
+                raise ValidationError(
+                    '%(value)s collides with showing that is to be added',
+                    params={'value': colliding_showing}
+                )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        return super(Showing, self).save(*args, **kwargs)
 
     def get_time(self):
-        start_hour = self.when.time().hour
-        start_minutes = self.when.time().minute
+        tz = timezone.get_default_timezone()
+        start_hour = self.when.astimezone(tz).time().hour
+        start_minutes = self.when.astimezone(tz).time().minute
 
         return f'{start_hour:02}:{start_minutes:02}'
 
