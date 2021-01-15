@@ -40,6 +40,7 @@ class Movie(models.Model):
                 name='correct_duration_in_minutes'
             ),
         ]
+        ordering = ['year_of_production']
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
