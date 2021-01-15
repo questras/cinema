@@ -14,6 +14,8 @@ from pathlib import Path
 import os
 import dj_database_url
 
+from django.contrib.messages import constants as messages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -152,3 +154,9 @@ CINEMA_OPENING_HOUR = 9
 CINEMA_OPENING_MINUTE = 0
 CINEMA_CLOSING_HOUR = 3
 CINEMA_CLOSING_MINUTE = 0
+
+
+# Messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}

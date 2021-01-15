@@ -1,6 +1,8 @@
 from django.views.generic import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
@@ -20,6 +22,7 @@ def finalize_order(request, order_uuid, accepted):
         order.cashier_who_accepted = request.user
         order.accepted = accepted
         order.save()
+        messages.success(request, 'Order has been finalized successfully.')
 
     return redirect('profile')
 
@@ -34,11 +37,12 @@ def reject_order_view(request, order_uuid):
     return finalize_order(request, order_uuid, False)
 
 
-class CreateOrderView(LoginRequiredMixin, CreateView):
+class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Order
     form_class = CreateOrderForm
     template_name = 'orders/create_order.html'
     success_url = reverse_lazy('profile')
+    success_message = 'Tickets booked successfully!'
 
     def get_showing(self):
         showing_uuid = self.kwargs['showing_uuid'] or None

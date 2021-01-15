@@ -7,9 +7,9 @@
         {% for showing in showings %}
             {% if showing.get_numerical_weekday == num %}
                 <p>
-                    {{ showing.get_time }}
+                    {{ showing.get_formatted_time }}
                     <a href="{{ showing.get_absolute_url }}">{{ showing.movie.title }}</a>
-                    (Hall {{ showing.hall.number }})
+                    (Hall {{ showing.hall.number }}) (Free: {{ showing.free_places }}/{{ showing.all_places }})
                     <a href="{% url 'create-order' showing.uuid %}"><button class="btn btn-primary">Book</button></a>
                 </p>
             {% endif %}
