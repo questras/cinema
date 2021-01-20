@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('cinema.urls')),
     path('account/', include('users.urls')),
     path('orders/', include('orders.urls')),
+    path('staff/', include('staff_panel.urls')),
 ]

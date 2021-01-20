@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p>
+    <h1>Hello {{ user.get_full_name }}</h1>
+    <h2>What would you like to do?</h2>
+    </p>
+    <!-- Add Buttons -->
+    <p>
+        <a href="{% url 'create-movie' %}">
+            <button class="btn btn-success">Add Movie</button>
+        </a>
+    </p>
+    <p>
+        <a href="{% url 'create-showing' %}">
+            <button class="btn btn-success">Add Showing</button>
+        </a>
+    </p>
+    <p>
+        <a href="{% url 'create-hall' %}">
+            <button class="btn btn-success">Add Hall</button>
+        </a>
+    </p>
+    <!-- All Showings -->
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#showings" role="button" aria-expanded="false"
+           aria-controls="collapseExample">
+            Show all Showings
+        </a>
+    </p>
+    <div class="collapse" id="showings">
+        <div class="card card-body">
+            {% for showing in showings %}
+                <p>
+                    {{ showing }}
+                    <a href="{% url 'delete-showing' showing.uuid %}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- All Movies -->
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#movies" role="button" aria-expanded="false"
+           aria-controls="collapseExample">
+            Show all Movies
+        </a>
+    </p>
+    <div class="collapse" id="movies">
+        <div class="card card-body">
+            {% for movie in movies %}
+                <p>
+                    {{ movie }}
+                    <a href="{% url 'delete-movie' movie.slug %}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- All Halls -->
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#halls" role="button" aria-expanded="false"
+           aria-controls="collapseExample">
+            Show all Halls
+        </a>
+    </p>
+    <div class="collapse" id="halls">
+        <div class="card card-body">
+            {% for hall in halls %}
+                <p>
+                    {{ hall }}
+                    <a href="{% url 'delete-hall' hall.number %}">
+                        <button class="btn btn-danger">Delete</button>
+                    </a>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

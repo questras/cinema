@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p><h1>Add Showing</h1></p>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="edit-form">
+            <p>
+            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                {{ form.when }}
+            </div>
+            </p>
+
+            <p>{{ form.movie.label }}: {{ form.movie }}</p>
+            <p>{{ form.hall.label }}: {{ form.hall }}</p>
+        </div>
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+
+    <script>
+        $(function () {
+            $("#datetimepicker1").datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+            });
+        });
+    </script>
+{% endblock %}
