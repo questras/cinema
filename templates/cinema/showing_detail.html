@@ -3,12 +3,12 @@
 {% block content %}
     <p>
         <h2>Showing</h2>
-        <p><a href="{{ showing.movie.get_absolute_url }}">{{ showing.movie.title }}</a></p>
-        <p>{{ showing.get_date }} ({{ showing.get_weekday }} {{ showing.get_time }})</p>
+        <p><a href="{{ showing.movie.get_absolute_url }}">{{ showing.movie }}</a></p>
+        <p>{{ showing.get_date }} ({{ showing.get_weekday }} {{ showing.get_formatted_time }})</p>
         <p>Duration: {{ showing.movie.duration_in_minutes }} minutes</p>
         <p>Free Seats: {{ showing.free_places }}/{{ showing.all_places }}</p>
         <p><a href="{% url 'create-order' showing.uuid %}">
-            <button class="btn btn-primary">Book</button>
+            <button class="btn btn-primary">Book Ticket</button>
         </a></p>
     </p>
 {% endblock %}
