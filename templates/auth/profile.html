@@ -15,8 +15,11 @@
         <p>{{ order.showing }}</p>
     {% endfor %}
 
-    {% if tickets_for_cashier %}
+    {% if user.is_cashier %}
         <h2>Tickets to accept:</h2>
+    {% endif %}
+
+    {% if tickets_for_cashier %}
         {% for order in tickets_for_cashier %}
             <p>
                 {{ order }}
