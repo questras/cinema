@@ -13,7 +13,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        now = timezone.now()
+        # Replace hour and minute to 0 to include all tickets for current day.
+        now = timezone.now().replace(hour=0, minute=0)
         tickets_history = self.request.user.my_orders.filter(showing__when__lt=now).order_by('showing__when')
         tickets_current = self.request.user.my_orders.filter(showing__when__gte=now).order_by('showing__when')
         tickets_for_cashier = None
