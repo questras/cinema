@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
+from django.db.models import Q
 
 from .models import Showing, Movie
 
@@ -63,3 +64,23 @@ class MovieListView(ListView):
     model = Movie
     template_name = 'cinema/movie_list.html'
     context_object_name = 'movies'
+
+    def get_queryset(self):
+        search_query = self.request.GET.get('search_query') or None
+
+        if search_query:
+            queryset = Movie.objects.filter(
+                Q(title__icontains=search_query) | Q(director__icontains=search_query)
+            )
+        else:
+            queryset = Movie.objects.all()
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(MovieListView, self).get_context_data(**kwargs)
+        search_query = self.request.GET.get('search_query') or ''
+
+        context['search_query'] = search_query
+
+        return context

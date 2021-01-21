@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <p>
-    <h1>All Movies</h1>
+    <p><h1>Movies</h1></p>
+
+    <form method="get">
+        <div class="form-group">
+            <label>
+                <input type="text" name="search_query" value="{{ search_query }}" placeholder="Search a movie...">
+            </label>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <form method="get">
+        <div class="form-group">
+            <input type="text" name="search_query" value="" hidden>
+            <button type="submit" class="btn btn-primary">Show All</button>
+        </div>
+    </form>
+
     {% for movie in movies %}
         <p>
             <a href="{{ movie.get_absolute_url }}">{{ movie }}</a>
         </p>
     {% endfor %}
-    </p>
+
 {% endblock %}
