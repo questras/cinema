@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <p><h1>Showings</h1></p>
+
+    <form method="get">
+        <div class="form-group">
+            <!-- Movie Text Input -->
+            <label>
+                Movie: <input type="text" name="movie" value="{{ movie }}" placeholder="Search a movie...">
+            </label>
+            <p>
+            <!-- From When Calendar -->
+            <div class="input-group date" id="from" data-target-input="nearest">
+                <div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+                    <div class="input-group-text">From </div>
+                </div>
+                <input type="text" class="form-control datetimepicker-input" name="from_when"
+                       data-target="#from" data-toggle="datetimepicker">
+            </div>
+            </p>
+            <!-- To When Calendar -->
+            <p>
+            <div class="input-group date" id="to" data-target-input="nearest">
+                <div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+                    <div class="input-group-text">To </div>
+                </div>
+                <input type="text" class="form-control datetimepicker-input" name="to_when"
+                           data-target="#to" data-toggle="datetimepicker">
+            </div>
+            </p>
+
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% for showing in showings %}
+        <p>
+            <a href="{{ showing.get_absolute_url }}">{{ showing }}</a>
+        </p>
+    {% endfor %}
+
+    {{ from_when|json_script:"from-when-data" }}
+    {{ to_when|json_script:"to-when-data" }}
+    <script>
+        // Set datetimepickers to show currently sought date-times.
+        $(function () {
+            moment.updateLocale('pl', {
+                week: {
+                    dow: 1 // Set Monday to first day of week.
+                }
+            })
+
+            let from = document.getElementById('from-when-data').textContent;
+            // from-when-data is in "" brackets - remove them.
+            from = from.substring(1, from.length - 1);
+
+            let to = document.getElementById('to-when-data').textContent;
+            // to-when-data is in "" brackets - remove them.
+            to = to.substring(1, to.length - 1);
+
+            let fromDate = moment(from, "DD/MM/YYYY HH:mm");
+            let toDate = moment(to, "DD/MM/YYYY HH:mm");
+
+            let fromConfig = {
+                format: "DD/MM/YYYY HH:mm",
+                locale: 'pl',
+            };
+            let toConfig = {
+                format: "DD/MM/YYYY HH:mm",
+                locale: 'pl',
+            }
+
+            if (fromDate.isValid()) {
+                fromConfig["defaultDate"] = fromDate;
+            }
+            if (toDate.isValid()) {
+                toConfig["defaultDate"] = toDate;
+            }
+
+            $("#from").datetimepicker(fromConfig);
+            $("#to").datetimepicker(toConfig);
+        });
+    </script>
+{% endblock %}

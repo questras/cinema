@@ -5,11 +5,13 @@ from .views import (
     MovieDetailView,
     ShowingDetailView,
     MovieListView,
+    ShowingListView,
 )
 
 urlpatterns = [
     path('', ScheduleView.as_view(), name='schedule'),
     path('movies/', MovieListView.as_view(), name='movie-list'),
-    path('<slug:slug>/', MovieDetailView.as_view(), name='movie-detail-view'),
+    path('showings/', ShowingListView.as_view(), name='showing-list'),
     path('showing/<uuid:pk>/', ShowingDetailView.as_view(), name='showing-detail-view'),
+    path('<slug:slug>/', MovieDetailView.as_view(), name='movie-detail-view'),
 ]
