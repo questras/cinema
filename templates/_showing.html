@@ -1,0 +1,10 @@
+<div class="card">
+    <div class="card-body">
+        {{ showing.get_formatted_time }} ({{ showing.get_date }})
+        <a href="{{ showing.get_absolute_url }}">{{ showing.movie.title }}</a>
+        (Hall {{ showing.hall.number }}) (Free: {{ showing.free_places }}/{{ showing.all_places }})
+        <a href="{% url 'create-order' showing.uuid %}">
+            <button class="btn btn-primary">Book Ticket</button>
+        </a>
+    </div>
+</div>

@@ -32,7 +32,7 @@
         <div class="card card-body">
             {% for showing in showings %}
                 <p>
-                    {{ showing }}
+                    <a href="{{ showing.get_absolute_url }}">{{ showing }}</a>
                     <a href="{% url 'delete-showing' showing.uuid %}">
                         <button class="btn btn-danger">Delete</button>
                     </a>
