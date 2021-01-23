@@ -3,9 +3,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
 
 from .models import Order
 from .forms import CreateOrderForm
@@ -48,6 +49,22 @@ class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         showing_uuid = self.kwargs['showing_uuid'] or None
         showing = get_object_or_404(Showing, pk=showing_uuid)
         return showing
+
+    def get(self, request, *args, **kwargs):
+        # If showing has already taken place.
+        if self.get_showing().get_datetime() < timezone.localtime(timezone.now()):
+            messages.error(request, message='This showing has already taken place.')
+            return redirect(reverse('schedule'))
+
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        # If showing has already taken place.
+        if self.get_showing().get_datetime() < timezone.localtime(timezone.now()):
+            messages.error(request, message='Cannot order: This showing has already taken place.')
+            return redirect(reverse('schedule'))
+
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

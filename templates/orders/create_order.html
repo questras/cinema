@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
     <p>
     <h3>{{ showing }}</h3>
     {{ showing.free_places }} / {{ showing.all_places }} Free Seats
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-success">Order</button>
     </form>
     </p>
