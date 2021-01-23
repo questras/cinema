@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h1>Manage Cashiers</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form|crispy }}
+            <button type="submit" name="promote" class="btn btn-success">Promote</button>
+            <button type="submit" name="demote" class="btn btn-danger">Demote</button>
+        </div>
+    </form>
+
+    <h2>Cashiers:</h2>
+    {% for cashier in cashiers %}
+        <p>
+            <strong>{{ cashier.get_full_name }}</strong>: {{ cashier.email }}
+            <button class="btn btn-outline-dark" title="Copy To Clipboard"
+                    onclick="copyToClipboard('{{ cashier.email }}')">
+                copy
+            </button>
+        </p>
+    {% endfor %}
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+        }
+    </script>
+{% endblock %}

@@ -5,6 +5,11 @@
     <h1>Hello {{ user.get_full_name }}</h1>
     <h2>What would you like to do?</h2>
     </p>
+    <p>
+        <a href="{% url 'manage-cashiers' %}" class="btn btn-primary" role="button">
+            Manage Cashiers
+        </a>
+    </p>
     <!-- Add Buttons -->
     <p>
         <a href="{% url 'create-movie' %}">

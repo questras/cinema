@@ -1,5 +1,6 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.forms import DateTimeField, DateTimeInput
+from django.forms import EmailField
 from cinema.models import Showing
 
 
@@ -15,3 +16,7 @@ class CreateShowingForm(ModelForm):
     class Meta:
         model = Showing
         fields = ('when', 'movie', 'hall')
+
+
+class SelectUserForm(Form):
+    email = EmailField(label="User's e-mail address")

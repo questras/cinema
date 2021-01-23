@@ -1,11 +1,14 @@
-from django.views.generic import TemplateView, CreateView, DeleteView
+from django.views.generic import TemplateView, CreateView, DeleteView, FormView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
 
-from .forms import CreateShowingForm
+from .forms import CreateShowingForm, SelectUserForm
 from cinema.models import Showing, Movie, Hall
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class StaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -90,3 +93,40 @@ class DeleteHallView(StaffRequiredMixin, DeleteView):
         response = super(DeleteHallView, self).delete(request, *args, **kwargs)
         messages.success(self.request, self.success_message)
         return response
+
+
+class ManageCashiersView(StaffRequiredMixin, FormView):
+    form_class = SelectUserForm
+    template_name = 'staff_panel/manage_cashiers.html'
+    success_url = reverse_lazy('manage-cashiers')
+
+    def get_context_data(self, **kwargs):
+        context = super(ManageCashiersView, self).get_context_data(**kwargs)
+        context['cashiers'] = User.objects.filter(is_cashier=True)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email') or ''
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = None
+
+        if user:
+            if 'promote' in request.POST:
+                user.is_cashier = True
+                msg = 'promoted'
+            elif 'demote' in request.POST:
+                user.is_cashier = False
+                msg = 'demoted'
+            else:
+                # Unknown post request.
+                messages.error(request, 'Something went wrong!')
+                return super(ManageCashiersView, self).post(request, *args, **kwargs)
+
+            user.save()
+            messages.success(request, f'{user.get_full_name()} ({user.email}) {msg}!')
+        else:
+            messages.error(request, f'User with email: {email} does not exist!')
+
+        return super(ManageCashiersView, self).post(request, *args, **kwargs)

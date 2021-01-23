@@ -8,6 +8,7 @@ from .views import (
     DeleteHallView,
     CreateShowingView,
     DeleteShowingView,
+    ManageCashiersView,
 )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path('delete-hall/<int:pk>/', DeleteHallView.as_view(), name='delete-hall'),
     path('create-showing/', CreateShowingView.as_view(), name='create-showing'),
     path('delete-showing/<uuid:pk>/', DeleteShowingView.as_view(), name='delete-showing'),
+    path('manage_cashiers/', ManageCashiersView.as_view(), name='manage-cashiers'),
 ]
