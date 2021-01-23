@@ -1,5 +1,6 @@
 from django.views.generic import CreateView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.utils import timezone
 
@@ -30,7 +31,8 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class SignUpView(CreateView):
+class SignUpView(SuccessMessageMixin, CreateView):
     form_class = CustomUserCreationForm
     template_name = 'auth/signup.html'
     success_url = reverse_lazy('login')
+    success_message = 'You registered successfully!'
