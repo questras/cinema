@@ -8,7 +8,9 @@
         <p>Duration: {{ showing.movie.duration_in_minutes }} minutes</p>
         <p>Free Seats: {{ showing.free_places }}/{{ showing.all_places }}</p>
         <p><a href="{% url 'create-order' showing.uuid %}">
-            <button class="btn btn-primary">Book Ticket</button>
+            <button class="btn btn-primary" {% if showing.free_places == 0 %}disabled{% endif %}>
+                Book Ticket
+            </button>
         </a></p>
     </p>
 {% endblock %}

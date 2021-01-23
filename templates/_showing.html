@@ -4,7 +4,9 @@
         <a href="{{ showing.get_absolute_url }}">{{ showing.movie.title }}</a>
         (Hall {{ showing.hall.number }}) (Free: {{ showing.free_places }}/{{ showing.all_places }})
         <a href="{% url 'create-order' showing.uuid %}">
-            <button class="btn btn-primary">Book Ticket</button>
+            <button class="btn btn-primary" {% if showing.free_places == 0 %}disabled{% endif %}>
+                Book Ticket
+            </button>
         </a>
     </div>
 </div>
