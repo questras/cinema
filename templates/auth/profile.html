@@ -1,36 +1,60 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <p><h1>Hello {{ user.get_full_name }}</h1></p>
     <p>
-    <h2>Your current tickets:</h2>
-    {% for order in tickets_current %}
-        <p>
-            {{ order.tickets_amount }} tickets for
-            <a href="{{ order.showing.get_absolute_url }}">{{ order.showing }}</a>
-            ({{ order.is_accepted }})
-        </p>
-    {% endfor %}
-    <h2>History of your tickets:</h2>
-    {% for order in tickets_history %}
-        <p>{{ order.showing }}</p>
-    {% endfor %}
+        <a class="btn btn-primary" data-toggle="collapse" href="#current-tickets" role="button"
+           aria-expanded="false" aria-controls="collapseExample">
+            Current Tickets
+        </a>
+    </p>
+    <div class="collapse" id="current-tickets">
+        <div class="card card-body">
+            {% for order in tickets_current %}
+                <p>
+                    {% include '_order.html' %}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
+    <p>
+        <a class="btn btn-primary" data-toggle="collapse" href="#tickets-history" role="button"
+           aria-expanded="false" aria-controls="collapseExample">
+            Tickets History
+        </a>
+    </p>
+    <div class="collapse" id="tickets-history">
+        <div class="card card-body">
+            {% for order in tickets_history %}
+                <p>
+                    {% include '_order.html' %}
+                </p>
+            {% endfor %}
+        </div>
+    </div>
 
     {% if user.is_cashier %}
-        <h2>Tickets to accept:</h2>
+        <p>
+            <a class="btn btn-warning" data-toggle="collapse" href="#tickets-cashier" role="button"
+               aria-expanded="false" aria-controls="collapseExample">
+                Tickets To Accept
+            </a>
+        </p>
     {% endif %}
 
     {% if tickets_for_cashier %}
-        {% for order in tickets_for_cashier %}
-            <p>
-                {{ order }}
-                <a href="{% url 'accept-order' order.uuid %}">
-                    <button class="btn btn-success">Accept</button>
-                </a>
-                <a href="{% url 'reject-order' order.uuid %}">
-                    <button class="btn btn-danger">Reject</button>
-                </a>
-            </p>
-        {% endfor %}
+        <div class="collapse" id="tickets-cashier">
+            <div class="card card-body">
+                {% for order in tickets_for_cashier %}
+                    <p>
+                    <div class="d-flex">
+                        {% include '_order_cashier.html' %}
+                    </div>
+
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
     {% endif %}
     </p>
 

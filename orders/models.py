@@ -26,16 +26,24 @@ class Order(models.Model):
         ]
 
     def is_accepted(self):
-        string = ''
-        if self.accepted:
+        return self.accepted
+
+    def is_rejected(self):
+        return (not self.is_accepted()) and self.cashier_who_accepted is not None
+
+    def is_not_accepted(self):
+        return (not self.is_accepted()) and (not self.is_rejected())
+
+    def is_accepted_string(self):
+        if self.is_accepted():
             string = 'accepted'
-        elif not self.accepted and self.cashier_who_accepted is not None:
+        elif self.is_rejected():
             string = 'rejected'
         else:
             string = 'not accepted'
         return string
 
     def __str__(self):
-        accepted = self.is_accepted()
+        accepted = self.is_accepted_string()
         client = self.client.get_full_name()
         return f'Ticket #{self.uuid}: {self.showing} bought by {client} ({accepted})'

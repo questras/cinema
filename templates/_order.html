@@ -1,0 +1,16 @@
+<div class="card">
+    <div class="card-body">
+        <strong>{{ order.tickets_amount }}</strong> Tickets for
+        <a href="{{ order.showing.get_absolute_url }}">{{ order.showing }}</a>
+        (
+        {% if order.is_accepted %}
+            <span style="color: green">Accepted</span>
+        {% elif order.is_rejected %}
+            <span style="color: red">Rejected</span>
+        {% else %}
+            <span style="color: gray">Pending...</span>
+        {% endif %}
+        )
+        ({{ order.uuid }})
+    </div>
+</div>

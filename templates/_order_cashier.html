@@ -1,0 +1,11 @@
+<div class="card">
+    <div class="card-body">
+        {{ order.uuid }}:
+        {{ order.tickets_amount }} Tickets for
+        <a href="{{ order.showing.get_absolute_url }}">{{ order.showing }}</a>
+        <a href="{% url 'accept-order' order.uuid %}"
+           class="btn btn-success ml-1" role="button">Accept</a>
+        <a href="{% url 'reject-order' order.uuid %}"
+           class="btn btn-danger ml-1" role="button">Reject</a>
+    </div>
+</div>
