@@ -152,6 +152,11 @@ class Showing(models.Model):
             raise validation_error
 
     def clean(self):
+        if not self.when:
+            raise ValidationError('Incorrect Date.')
+        elif not (1888 <= self.when.year <= 3000):
+            raise ValidationError('Provided incorrect Year.')
+
         self.check_is_not_colliding()
         self.check_is_between_open_hours()
 
